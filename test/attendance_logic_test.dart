@@ -171,4 +171,68 @@ void main() {
       expect(summary.lateDays, 1);
     });
   });
+
+  group('AttendanceProvider data reset', () {
+    late AttendanceProvider provider;
+
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
+      provider = AttendanceProvider();
+      await provider.load();
+      // Keep the demo seed here so reset behaviour is tested from a
+      // realistic starting state.
+    });
+
+    test('load seeds 6 demo employees with attendance', () {
+      expect(provider.employees.length, 6);
+      expect(provider.records, isNotEmpty);
+      expect(
+        provider.employees.map((e) => e.name),
+        contains('Rahim Uddin'),
+      );
+    });
+
+    test('clear all data empties employees and records and persists',
+        () async {
+      await provider.clearAllData();
+      expect(provider.employees, isEmpty);
+      expect(provider.records, isEmpty);
+      expect(provider.toCsv().trim().split('\n').length, 1);
+      // A fresh provider loading from storage still sees the empty state.
+      final reloaded = AttendanceProvider();
+      await reloaded.load();
+      expect(reloaded.employees, isEmpty);
+      expect(reloaded.records, isEmpty);
+    });
+
+    test('restore demo data clears custom data and reseeds the demo team',
+        () async {
+      final custom = await provider.addEmployee('Real Person', 'Manager');
+      await provider.checkIn(custom.id, at: DateTime(2026, 11, 9, 9, 0));
+      await provider.resetDemoData();
+      expect(provider.employees.length, 6);
+      expect(provider.records, isNotEmpty);
+      expect(
+        provider.employees.map((e) => e.name),
+        everyElement(isNot('Real Person')),
+      );
+      expect(
+        provider.employees.map((e) => e.name),
+        containsAll(['Rahim Uddin', 'Nusrat Jahan', 'Mim Chowdhury']),
+      );
+      expect(
+        provider.records.map((r) => r.employeeId),
+        everyElement(isIn(provider.employees.map((e) => e.id))),
+      );
+    });
+
+    test('clear all data then restore demo data brings the demo team back',
+        () async {
+      await provider.clearAllData();
+      expect(provider.employees, isEmpty);
+      await provider.resetDemoData();
+      expect(provider.employees.length, 6);
+      expect(provider.records, isNotEmpty);
+    });
+  });
 }

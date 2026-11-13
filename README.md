@@ -13,6 +13,7 @@ Built with Flutter and Material 3, dark theme with a #39FF88 accent. Part of a o
 - Attendance history: pick any date and see that day's full register
 - CSV export: full history as CSV text with a copy button, ready to paste into a spreadsheet
 - Demo seed data: 6 employees with this week's attendance on first run, so the app is useful immediately
+- Reset data: from the refresh button in the AppBar, clear all data to start with an empty team, or restore the 6 person demo team
 - Local persistence with shared_preferences, data survives app restarts
 
 ## How it works
@@ -47,7 +48,7 @@ flutter build web
 flutter test
 ```
 
-Unit tests cover check in and check out rules, monthly day counts and hours, late arrival counting, the today register, and CSV export.
+Unit tests cover check in and check out rules, monthly day counts and hours, late arrival counting, the today register, CSV export, and data reset (clear all and restore demo).
 
 ## Tech
 

@@ -305,6 +305,15 @@ class AttendanceProvider extends ChangeNotifier {
     return value;
   }
 
+  /// Clears every employee and attendance record and saves the empty
+  /// state, so a real team can start with no demo data left behind.
+  Future<void> clearAllData() async {
+    employees = [];
+    records = [];
+    await _save();
+    notifyListeners();
+  }
+
   /// Clears all data and reseeds the demo team. Used from Settings.
   Future<void> resetDemoData() async {
     _seedDemoData();
