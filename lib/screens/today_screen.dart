@@ -152,6 +152,49 @@ class TodayScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                  if (row.isPresent && !row.isCheckedOut) ...[
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: row.record?.breakStart == null
+                                ? () async {
+                                    await context
+                                        .read<AttendanceProvider>()
+                                        .startBreak(row.employee.id);
+                                  }
+                                : null,
+                            icon: const Icon(Icons.coffee),
+                            label: const Text('Start Break'),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: row.record?.breakStart != null &&
+                                    row.record?.breakEnd == null
+                                ? () async {
+                                    await context
+                                        .read<AttendanceProvider>()
+                                        .endBreak(row.employee.id);
+                                  }
+                                : null,
+                            icon: const Icon(Icons.coffee_outlined),
+                            label: Text(
+                              row.record?.breakStart != null &&
+                                      row.record?.breakEnd == null
+                                  ? 'End Break'
+                                  : row.record?.breakMinutes != null &&
+                                          row.record!.breakMinutes > 0
+                                      ? 'Break ${row.record!.breakMinutes}m'
+                                      : 'End Break',
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),

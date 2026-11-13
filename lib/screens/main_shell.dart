@@ -5,6 +5,8 @@ import '../state/attendance_provider.dart';
 import 'employees_screen.dart';
 import 'export_screen.dart';
 import 'history_screen.dart';
+import 'reports_screen.dart';
+import 'settings_screen.dart';
 import 'today_screen.dart';
 
 class MainShell extends StatefulWidget {
@@ -21,7 +23,9 @@ class _MainShellState extends State<MainShell> {
     TodayScreen(),
     EmployeesScreen(),
     HistoryScreen(),
+    ReportsScreen(),
     ExportScreen(),
+    SettingsScreen(),
   ];
 
   Future<void> _showResetDialog(BuildContext context) async {
@@ -118,9 +122,19 @@ class _MainShellState extends State<MainShell> {
             label: 'History',
           ),
           NavigationDestination(
+            icon: Icon(Icons.bar_chart_outlined),
+            selectedIcon: Icon(Icons.bar_chart),
+            label: 'Reports',
+          ),
+          NavigationDestination(
             icon: Icon(Icons.file_download_outlined),
             selectedIcon: Icon(Icons.file_download),
             label: 'Export',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.settings_outlined),
+            selectedIcon: Icon(Icons.settings),
+            label: 'Settings',
           ),
         ],
       ),

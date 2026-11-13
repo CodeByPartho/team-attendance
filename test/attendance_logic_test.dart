@@ -156,7 +156,8 @@ void main() {
       final csv = provider.toCsv();
       final lines = csv.trim().split('\n');
       expect(lines.first,
-          'Employee,Role,Date,Check In,Check Out,Hours Worked,Status');
+          'Employee,Role,Date,Check In,Check Out,Break Minutes,Hours Worked,'
+          'Regular Hours,Overtime Hours,Status,Edited');
       expect(lines.length, 2);
       expect(lines[1], contains('Test Person'));
       expect(lines[1], contains('2026-11-09'));
