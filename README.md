@@ -4,6 +4,19 @@ A staff attendance app for small teams. Employees check in when they arrive and 
 
 Built with Flutter and Material 3, dark theme with a #39FF88 accent. Part of a one app per day reference build series by Partho Sarothi Paik. All code is original, written for this project.
 
+Try it in your browser: https://codebypartho.github.io/team-attendance/
+
+## Download the APK
+
+Download the APK from the [v1.0.0 release](https://github.com/CodeByPartho/team-attendance/releases) on GitHub.
+
+## Screenshots
+
+![Today register](screenshots/today.png)
+![Employees](screenshots/employees.png)
+![Monthly summary](screenshots/summary.png)
+![Attendance history](screenshots/history.png)
+
 ## Features
 
 - Employee list: add employees with a name and role, remove them when they leave
