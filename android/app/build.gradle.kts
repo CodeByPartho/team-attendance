@@ -60,12 +60,49 @@ android {
             }
         }
     }
+
+    packaging {
+        resources {
+            // datastore 1.2.1 ships the same LICENSE.txt in both
+            // datastore-core-okio and datastore-core-okio-jvm; the
+            // classes do not clash, only this resource file does.
+            excludes += "META-INF/androidx/datastore/datastore-core-okio/LICENSE.txt"
+            // Multiplatform jars (collection 1.4.2, okio 3.9.1, ...)
+            // all embed the same Kotlin multiplatform metadata files
+            // under their shared source-set dirs. They are compiler
+            // metadata, unused at Android runtime. (Literal leading
+            // segments only: AGP does not match a leading * here.)
+            excludes += "commonMain/**"
+            excludes += "linuxMain/**"
+            excludes += "nativeMain/**"
+            // Same file in every Kotlin multiplatform jar; compiler
+            // metadata about project structure, unused at runtime.
+            excludes += "META-INF/kotlin-project-structure-metadata.json"
+        }
+    }
 }
 
 kotlin {
     compilerOptions {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
     }
+}
+
+// v1.1.0 dependency fix: shared_preferences_android pulls
+// androidx.collection:collection-ktx:1.1.0 (via fragment-ktx) while
+// android_file_picker pulls androidx.collection:collection:1.4.2
+// (via core 1.18.0). Both ship the same ArrayMapKt / ArraySetKt /
+// LruCacheKt classes, so the release build fails
+// checkReleaseDuplicateClasses. collection-jvm 1.4.2 already provides
+// those classes, so excluding the old ktx artifact is safe.
+configurations.all {
+    exclude(group = "androidx.collection", module = "collection-ktx")
+    // Same multiplatform split problem in datastore 1.2.1 (pulled in by
+    // shared_preferences_android): the -android AARs and the -jvm JARs
+    // ship identical classes, failing checkReleaseDuplicateClasses.
+    // The -android artifacts are the ones used on Android.
+    exclude(group = "androidx.datastore", module = "datastore-core-jvm")
+    exclude(group = "androidx.datastore", module = "datastore-preferences-core-jvm")
 }
 
 flutter {
